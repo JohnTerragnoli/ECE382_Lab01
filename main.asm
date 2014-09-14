@@ -13,6 +13,25 @@
                                             ; that have references to current
                                             ; section
 ;-------------------------------------------------------------------------------
+
+;which ever functionality you want to run, just put it on top :)
+AFunctionality: .byte	0x22, 0x11, 0x22, 0x22, 0x33, 0x33, 0x08, 0x44, 0x08, 0x22, 0x09, 0x44, 0xFF, 0x11, 0xFF, 0x44, 0xCC, 0x33, 0x02, 0x33, 0x00, 0x44, 0x33, 0x33, 0x08, 0x55
+BFunctionality:	.byte	0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0xDD, 0x44, 0x08, 0x22, 0x09, 0x44, 0xFF, 0x22, 0xFD, 0x55
+RequiredFuntionality: .byte	0x11, 0x11, 0x11, 0x11, 0x11, 0x44, 0x22, 0x22, 0x22, 0x11, 0xCC, 0x55
+
+;CONSTANTS
+STORE_NUM:	.equ	0x0200
+WHICH_OP:	.equ	0x0011
+ONE:		.equ	0x0001
+UP_LIMIT:	.equ	0xFF
+READ_NUM:	.equ	0xC000
+THREE:		.equ	0x0003
+ZERO_B:		.equ	0x00
+ZERO_W:		.equ	0x0000
+
+
+
+;REGISTERS
 NC_FLAG:	.equ	r2 ;register used to determine carry
 PROG_LOC:	.equ	r5 ;where the program is reading from in ROM
 FIRST:		.equ	r6 ;where the first number in the command is stored.
@@ -34,8 +53,6 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
                                             ; Main loop here
 ;-------------------------------------------------------------------------------
-;BFunctionality:	.byte	0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0xDD, 0x44, 0x08, 0x22, 0x09, 0x44, 0xFF, 0x22, 0xFD, 0x55
-
 
 
 
@@ -46,10 +63,10 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 
 
 ;designtate where saving will occur
-			mov.w	#0x0200, MEM_STORE
+			mov.w	#STORE_NUM, MEM_STORE
 
 ;RECEIVING FIRST INSTRUCTION
-			mov.w	#0x0340, PROG_LOC
+			mov.w	#READ_NUM, PROG_LOC
 GET_FIRST	mov.b	0(PROG_LOC), FIRST
 
 GET_COM		inc		PROG_LOC
@@ -58,16 +75,16 @@ GET_COM		inc		PROG_LOC
 
 ;------------------------------------------------------------------------
 ;DETERMINE THE OPERATION
-			sub.w 	#0x0011, COMMAND
+			sub.w 	#WHICH_OP, COMMAND
 			jz		ADD_OP
-			sub.w	#0x0011, COMMAND
+			sub.w	#WHICH_OP, COMMAND
 			jz		SUB_OP
-			sub.w	#0x0011, COMMAND
+			sub.w	#WHICH_OP, COMMAND
 			jz		multiply
-			sub.w	#0x0011, COMMAND
+			sub.w	#WHICH_OP, COMMAND
 			jz		CLR_OP
-			sub		#0x0011, COMMAND
-			jz		forever
+			sub		#WHICH_OP, COMMAND
+			jz		end
 
 			jmp 	error
 ;catch if the command given isn't known by the system!!
@@ -82,16 +99,16 @@ ADD_OP		inc		PROG_LOC
 			add.b	0(PROG_LOC), FIRST
 
 			;check for over 255.
-			mov.w	#0x0001, CARRY_REG
+			mov.w	#ONE, CARRY_REG
 			and.w	NC_FLAG, CARRY_REG
 			jz		no_bust_add
 
 			;EXCEEDS 255
-			mov.b	#0xFF, 0(MEM_STORE)
+			mov.b	#UP_LIMIT, 0(MEM_STORE)
 			inc		MEM_STORE
 			jmp		GET_COM
 
-
+			;within range
 no_bust_add mov.b	FIRST, 0(MEM_STORE)
 			inc		MEM_STORE
 			jmp		GET_COM
@@ -107,16 +124,17 @@ SUB_OP		inc		PROG_LOC
 
 			;first check neg flag.
 			mov.w	NC_FLAG, NEG_REG
-			and.w	#0x0003, NEG_REG
+			and.w	#THREE, NEG_REG
 			jz		bust_low
 
+			;within range
 no_low		mov.b	FIRST, 0(MEM_STORE)
 			inc		MEM_STORE
 			jmp		GET_COM
 
 
-			;if bust range low
-bust_low	mov.b	#0x00, 0(MEM_STORE)
+			;if below range
+bust_low	mov.b	#ZERO_B, 0(MEM_STORE)
 			inc		MEM_STORE
 			jmp		GET_COM
 
@@ -125,8 +143,8 @@ bust_low	mov.b	#0x00, 0(MEM_STORE)
 
 
 ;------------------------------------------------------------------------
-multiply
-			mov.w	#0x0000, MUL_TOTAL; reset
+multiply	;peasant multiplication
+			mov.w	#ZERO_W, MUL_TOTAL; reset where product is stored.
 
 			;GET SECOND OPERAND
 			inc		PROG_LOC
@@ -140,7 +158,7 @@ stillThere	rra		FIRST
 			;test if the one in 14 is even.
 			;r15 used to check if even
 START_MUL	mov.w	FIRST, HOLDER
-			and.w	#0x0001, HOLDER
+			and.w	#ONE, HOLDER
 			;skip adding step if even
 			jz		do_not_add
 			add.w	SECOND, MUL_TOTAL
@@ -152,7 +170,7 @@ START_MUL	mov.w	FIRST, HOLDER
 
 
 
-do_not_add	add.w	#0x0000, FIRST
+do_not_add	add.w	#ZERO_W, FIRST
 			jz		save_prod
 			jmp 	stillThere
 
@@ -169,35 +187,24 @@ store_prod	mov.b	FIRST, 0(MEM_STORE)
 ;bust_mul	mov.w	#0xFF, FIRST
 ;			jmp		store_prod
 
-;------------------------------------------------------------------------S
-
-
+;------------------------------------------------------------------------
 
 
 
 
 
 ;------------------------------------------------------------------------
-CLR_OP		mov.b	#0x00, 0(MEM_STORE)
+CLR_OP		mov.b	#ZERO_B, 0(MEM_STORE)
 			inc		MEM_STORE
 			inc		PROG_LOC
 			jmp		GET_FIRST
 ;------------------------------------------------------------------------
 
+
+
 error		jmp 	error
 
-forever		jmp		forever
-
-
-
-
-
-
-
-
-
-
-
+end			jmp		end
 
 ;-------------------------------------------------------------------------------
 ;           Stack Pointer definition
