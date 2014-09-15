@@ -49,9 +49,20 @@ Just puts the program into an infinite loop.
 
 #B Functionality
 
+To achieve B functionality, overflow had to be controlled. If the result exceeded 0xFF, then the answer was 0xFF.  In order to do this, the carry flag was check, indicating an overflow.  If the result went below 0x00, then the answer 0x00.  In order to do this, the negative flag was checked.  Both the zero and the negative flags are stored in register 3.  
+
+Unfortunately in my program, the overflow control for multiplication does not work.  It does work for addition and subtraction.  
+
 #A Functionality
 
+In order to earn full credit, this method needed to work in log(n) time.  This was done by implementing [Peasant Multiplication](http://www.cut-the-knot.org/Curriculum/Algebra/PeasantMultiplication.shtml). It is explained further in this cite.  The basic principle is that the first number is divided by two repeatedly, which the second number is doubled.  The results from doubling the second number are all added together to get the answer, with the exception of the second numbers that correspond to an even first number.  This means that the answer will be found in log(n) times.  
+
+The multiplication does work, however, it is not compatable with the overflow check in the B functionality.  It will roll over sometimes. 
+
 #Lessons Learned 
+
+1. I never knew peasant multiplication existed before but it makes me excited.  
+2. Things stored as .byte variables at the beginning of the code will be save in ROM at 0xC000.  This makes sense, but I never thought of a practical use for it before on my own.  
 
 The code for the final program may be seen here: 
 [Final Code](https://raw.githubusercontent.com/JohnTerragnoli/ECE382_Lab01/master/main.asm)
