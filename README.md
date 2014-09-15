@@ -16,6 +16,8 @@ Below is the flowchart that was drawn before any coding was done.  The purpose f
 
 ![alt tag](https://raw.githubusercontent.com/JohnTerragnoli/ECE382_Lab01/master/Flowchart.JPG "Flowchart")
 
+Something not included until the actual construction was the error loop, which is not shown in the prelab flowchart.  The purpose of the error loop is to trap the machine when it is fed a command that it is not built to handle.  This way, the user can understand right away the nature of the problem that has occured and at what location, using the step command.  
+
 #Required Functionality
 
 For the required funcitonality the program had to be able to perform the following commands: Add, subtract, clear (which places 00 in the destination), and end (which just ends the program).  The descripion for how each is shown below: 
