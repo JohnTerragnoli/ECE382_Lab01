@@ -26,10 +26,45 @@ First, what was needed was a way to step through the instructions.  The register
 
 The program then subtracted 0x0011 from the number stored in COMMAND and checked if the answer was zero.  The opcodes for add, subtract, multiply, clear, and end are 0x11, 0x22, 0x33, 0x44, and 0x55, respectively.  It did this continuously until the opcode was determined.  The computer then jumped to the appropriate location in the program to carry out that function.  
 
-##Add
-The second operand was then found and stored in the register named SECOND. Registers FIRST and SECOND were then added together and stored in FIRST.  The result was recorded and stored as the desired location in memory (0x0200).
+###Required Functionality Analyzing
+When I was actually making this, however, I tried to collect the SECOND operand before I jumped to the correct operation block of code.  I decided to collect the second operand after I determined the operation in order to simplify the look of the code, and also because not every operation uses byte directly after the command as SECOND.  If the function were CLR, then the next byte would have been FIRST, not SECOND.  Another way I could've done it, I suppose, would be to just make the SECOND register the new FIRST after the CLR command was finished.  However, this did not occur to me until later.  
 
-Fortunately, this was easy!
+##Add
+This was my main idea when I first started out.  The second operand was then found and stored in the register named SECOND. Registers FIRST and SECOND were then added together and stored in FIRST.  The result was recorded and stored as the desired location in memory (0x0200).
+
+###Add Construction Process
+(Includes debugging, testing, observations, and results)
+The test that I first used to determine the effectiveness of my code was this: 
+
+```
+0x11, 0x11, 0x11, 0x55
+```
+
+Running this code the program ran perfectly, reading 0x22 in 0x0200.  Then I tried this code: 
+
+```
+0x11, 0x11, 0x11, 0x11, ,0x11, 0x55
+```
+
+For which the answer should have been 0x22, 0x33 in 0x0200.  However, I came up with 0x33.  I quickly realized that this was because I did not increment the register holding the address to which the answer should be written.  This means the second answer was just overwriting the first.  
+
+Also, I figured that it would be easier to just add the second number stored in ROM directly to FIRST, instead of first putting it in SECOND.  This is because the answer to the first operation becomes the FIRST number in the next operation.  
+
+Next I tried my first test to ensure that my program still worked, and it did. 
+
+Then, I used two numbers that would make the system roll over.  I chose: 
+
+```
+0xFF, 0x11, 0x02, 0x55
+```
+
+I was not sure if I would have to do something extra to make sure that it rolled over, so I just tested it anyway.  Turns out that I didn't, however, I noticed that when it rolled over the carry flag in register 3 was raised.  I just remembered this for now and realized it would come in handy for the B Functionality.  
+
+###Add Conclusions
+
+
+
+
 
 ##Subtract
 Same principle was used as with add, except SECOND was subtracted from FIRST. 
@@ -75,3 +110,7 @@ The multiplication does work, however, it is not compatable with the overflow ch
 
 The code for the final program may be seen here: 
 [Final Code](https://raw.githubusercontent.com/JohnTerragnoli/ECE382_Lab01/master/main.asm)
+
+
+#Documentation: 
+NONE
