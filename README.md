@@ -1,5 +1,7 @@
-ECE382_Lab01
-============
+Simple Assembly Calculator
+==========================
+
+(Lab01)
 
 #Purpose
 
