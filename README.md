@@ -79,18 +79,33 @@ This yeilded zero as expected.
 
 
 ```
+0x16, 0x22, 0x11, 0x55
+```
+
+I ran this and got 5, which makes sense.  Then I ran this:
+
+
+```
 0x11, 0x22, 0x12, 0x55
 ```
 
-This rolled over and resulted in 0xFF, like expected.  This made me wonder if there was some sort of negative carry flag in register 3.  I played the program again, and noticed that one of the flags did change.  
+This rolled over and resulted in 0xFF, like expected.  This made me wonder if there was some sort of negative carry flag in register 3.  I played the program again, and noticed that one of the flags did change.  The negative flag changed, but only when the answer should have been less than or equal to zero (I tested a lot of subtractions to find this).  This didn't really matter for the required functionality but it sounded pretty important for B functionality.  
+
+##Subtraction Conclusions
+
+I blocked off this code once it was finished so that I knew the code inside the dashes is all that computed subtraction.  The code created from the process above will clearly handle any subtraction correctly that doesn't involve a roll over.  
+
+
+
 
 
 ##Multiplication
-Explained in A Funcitonality section.  
+Explained in A Funcitonality section, since it is not part of the Required Functionality.  
 
 
 ##Clear (CLR)
 If just places the value zero in (0x00) in the destination and clears the value in FIRST. 
+
 
 ###Clear Trouble
 It occured to me that it would be problematic if a clear was used as the first byte.  Not only does this not make sense, but then the number 0x44 could never be used as the first number to a program.  Therefore, I decided to assume that the command CLR could never happen first in the program.  
@@ -122,7 +137,7 @@ The multiplication does work, however, it is not compatable with the overflow ch
 #Lessons Learned 
 
 1. I never knew peasant multiplication existed before but it makes me excited.  
-2. Things stored as .byte variables at the beginning of the code will be save in ROM at 0xC000.  This makes sense, but I never thought of a practical use for it before on my own.  
+2. Things stored as .byte variables at the beginning of the code will be save in ROM at 0xC000.  This makes sense, but I never thought of a practical use for it before on my own.  At first I kept typing the answers into a different location in RAM manually, and I'm really glad I don't have to do that anymore.  
 
 The code for the final program may be seen here: 
 [Final Code](https://raw.githubusercontent.com/JohnTerragnoli/ECE382_Lab01/master/main.asm)
