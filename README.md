@@ -39,8 +39,8 @@ Explained in A Funcitonality section.
 ##Clear (CLR)
 If just places the value zero in (0x00) in the destination and clears the value in FIRST. 
 
-Easy stuff.  
-
+###Clear Trouble
+It occured to me that it would be problematic if a clear was used as the first byte.  Not only does this not make sense, but then the number 0x44 could never be used as the first number to a program.  Therefore, I decided to assume that the command CLR could never happen first in the program.  
 
 After all of the above commands the PROG_LOC was incremented, as was the location that all of the answers are stored, which is held in register MEM_STORE.  
 
