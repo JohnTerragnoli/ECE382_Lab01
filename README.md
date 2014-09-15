@@ -22,17 +22,17 @@ Something not included until the actual construction was the error loop, which i
 
 For the required funcitonality the program had to be able to perform the following commands: Add, subtract, clear (which places 00 in the destination), and end (which just ends the program).  The descripion for how each is shown below: 
 
-First, what was needed was a way to step through the instructions.  The register PROG_LOC, kept track of the current byte from memory.  After either a operand or an opcode was read, the number in PROG_LOC, referring to a location in ROM (0xC000), was incremented.  The first operand was stored in a register called FIRST, and the opcode was stored in a register named COMMAND.  
+First, I created the locations for where the instructions will be read and where the answers will be written.  I put them in the registers PROG_LOC and MEM_STORE, respectively.  These locations were 0xC000 and 0x0200, respectively.    
+
+Second, what was needed was a way to step through the instructions.  The register PROG_LOC, kept track of the current byte from ROM.  After either a operand or an opcode was read, the number in PROG_LOC, referring to a location in ROM (0xC000), was incremented.  The first operand was stored in a register called FIRST, and the opcode was stored in a register named COMMAND.  
 
 The program then subtracted 0x0011 from the number stored in COMMAND and checked if the answer was zero.  The opcodes for add, subtract, multiply, clear, and end are 0x11, 0x22, 0x33, 0x44, and 0x55, respectively.  It did this continuously until the opcode was determined.  The computer then jumped to the appropriate location in the program to carry out that function.  
 
 ###Required Functionality Analyzing
 When I was actually making this, however, I tried to collect the SECOND operand before I jumped to the correct operation block of code.  I decided to collect the second operand after I determined the operation in order to simplify the look of the code, and also because not every operation uses byte directly after the command as SECOND.  If the function were CLR, then the next byte would have been FIRST, not SECOND.  Another way I could've done it, I suppose, would be to just make the SECOND register the new FIRST after the CLR command was finished.  However, this did not occur to me until later.  
 
-##Add
-This was my main idea when I first started out.  The second operand was then found and stored in the register named SECOND. Registers FIRST and SECOND were then added together and stored in FIRST.  The result was recorded and stored as the desired location in memory (0x0200).
 
-###Add Construction Process
+##Add Construction Process
 (Includes debugging, testing, observations, and results)
 The test that I first used to determine the effectiveness of my code was this: 
 
@@ -62,12 +62,28 @@ I was not sure if I would have to do something extra to make sure that it rolled
 
 ###Add Conclusions
 
+I concluded that my program would work properly for any two hex digits numbers.  Knowing this, I decided to surround this portion of my code with dashes and label it, knowing that everything inside worked correctly.  
 
 
 
+##Subtract Construction Process
+(Includes debugging, testing, observations, and results)
 
-##Subtract
-Same principle was used as with add, except SECOND was subtracted from FIRST. 
+The same principles were done with subtraction as with addition.  To start off, I just copied my addition code and pasted it below.  Then I just changed the add.b to a sub.b.  After I did this, I decided to experiment with some small tests.  I chose
+
+```
+0x11, 0x22, 0x11, 0x55
+```
+This yeilded zero as expected.  
+
+
+
+```
+0x11, 0x22, 0x12, 0x55
+```
+
+This rolled over and resulted in 0xFF, like expected.  This made me wonder if there was some sort of negative carry flag in register 3.  I played the program again, and noticed that one of the flags did change.  
+
 
 ##Multiplication
 Explained in A Funcitonality section.  
