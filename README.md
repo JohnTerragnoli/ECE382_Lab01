@@ -14,6 +14,30 @@ Below is the flowchart that was drawn before any coding was done.  The purpose f
 
 #Required Functionality
 
+For the required funcitonality the program had to be able to perform the following commands: Add, subtract, clear (which places 00 in the destination), and end (which just ends the program).  The descripion for how each is shown below: 
+
+First, what was needed was a way to step through the instructions.  The register PROG_LOC, kept track of the current byte from memory.  After either a operand or an opcode was read, the number in PROG_LOC, referring to a location in ROM (0xC000), was incremented.  The first operand was stored in a register called FIRST, and the opcode was stored in a register named COMMAND.  
+
+The program then subtracted 0x0011 from the number stored in COMMAND and checked if the answer was zero.  The opcodes for add, subtract, multiply, clear, and end are 0x11, 0x22, 0x33, 0x44, and 0x55, respectively.  It did this continuously until the opcode was determined.  The computer then jumped to the appropriate location in the program to carry out that function.  
+
+##Add
+The second operand was then found and stored in the register named SECOND. Registers FIRST and SECOND were then added together and stored in FIRST.  The result was recorded and stored as the desired location in memory (0x0200).
+
+Fortunately, this was easy!
+
+##Subtract
+Same principle was used as with add. 
+
+##Clear (CLR)
+If just places the value zero in (0x00) in the destination and clears the value in FIRST. 
+
+Easy stuff.  
+
+##End
+Just puts the program into an infinite loop.  
+
+
+
 #B Functionality
 
 #A Functionality
