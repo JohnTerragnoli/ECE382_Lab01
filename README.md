@@ -1,6 +1,5 @@
 Simple Assembly Calculator
 ==========================
-
 (Lab01)
 
 #Purpose
