@@ -26,15 +26,24 @@ The second operand was then found and stored in the register named SECOND. Regis
 Fortunately, this was easy!
 
 ##Subtract
-Same principle was used as with add. 
+Same principle was used as with add, except SECOND was subtracted from FIRST. 
+
+##Multiplication
+Explained in A Funcitonality section.  
+
 
 ##Clear (CLR)
 If just places the value zero in (0x00) in the destination and clears the value in FIRST. 
 
 Easy stuff.  
 
+
+After all of the above commands the PROG_LOC was incremented, as was the location that all of the answers are stored, which is held in register MEM_STORE.  
+
 ##End
 Just puts the program into an infinite loop.  
+
+
 
 
 
