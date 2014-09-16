@@ -104,24 +104,38 @@ Explained in A Funcitonality section, since it is not part of the Required Funct
 
 
 ##Clear (CLR)
-If just places the value zero in (0x00) in the destination and clears the value in FIRST. 
+If just places the value zero in (0x00) in the destination and clears the value in FIRST. It also increments where the next byte will be read from in ROM (PROG_LOC) and where the next byte will be written (MEM_STORE).  There were no errors with this after the first try.  It is fairly straight forward and only took a few lines of code.  However, a reasonable assumption was made regarding the CLR function, which is described below.  
 
 
 ###Clear Trouble
 It occured to me that it would be problematic if a clear was used as the first byte.  Not only does this not make sense, but then the number 0x44 could never be used as the first number to a program.  Therefore, I decided to assume that the command CLR could never happen first in the program.  
 
-After all of the above commands the PROG_LOC was incremented, as was the location that all of the answers are stored, which is held in register MEM_STORE.  
+After all of the above commands, add, subtract, multiply, and clear, the PROG_LOC was incremented, as was the location that all of the answers are stored, which is held in register MEM_STORE.  
+
+
+
+##Error
+This is something of my own invention.  I created it so that the user would know if a command was fed into the system wrong or an unknown command was read.  This is also a possible end to the program. 
+
 
 ##End
-Just puts the program into an infinite loop.  
+Just puts the program into an infinite loop.
 
+This marks the end of the Required Functionality and how it was achieved.  
 
 
 
 
 #B Functionality
 
-To achieve B functionality, overflow had to be controlled. If the result exceeded 0xFF, then the answer was 0xFF.  In order to do this, the carry flag was check, indicating an overflow.  If the result went below 0x00, then the answer 0x00.  In order to do this, the negative flag was checked.  Both the zero and the negative flags are stored in register 3.  
+To achieve B functionality, overflow had to be controlled. If the result exceeded 0xFF, then the answer was 0xFF.  In order to do this, the carry flag was checked, indicating an overflow.  If the result went below 0x00, then the answer 0x00.  In order to do this, the negative flag was checked.  Both the zero and the negative flags are stored in register 3.
+
+Attaining this functionality for addition and subtraction only required small amounts of code.  I will step through the process of creating the code for addition and subtraction separately below. 
+
+##Addition Overflow
+
+First, I realized when I was building the addition code that the carry flag is raised whenever overflow occurs.  This being said, I decided to find a way to check if the carry flag was raised.  I designed the following code for this mini experiment.  
+
 
 Unfortunately in my program, the overflow control for multiplication does not work.  It does work for addition and subtraction.  
 
@@ -133,6 +147,8 @@ The multiplication does work, however, it is not compatable with the overflow ch
 
 #Unexpected Problems
 
+#Hardware Schematic
+There is no need for a hardware schematic in this lab.  
 
 #Lessons Learned 
 
@@ -144,4 +160,4 @@ The code for the final program may be seen here:
 
 
 #Documentation: 
-NONE
+Captain Trimble told me to look on the labs section of the course website to understand how this README should be written.  
