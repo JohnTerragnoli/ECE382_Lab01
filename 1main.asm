@@ -1,4 +1,15 @@
+;Author: John Terragnoli
+;Project: Simple Assembly Calculator (Lab01)
+;Period: T5A
+;Teacher: Captain Trimble
+;Date Started: 9 SEP 14
+;Date Finished: 16 SEP 14
+;Description: Intakes bytes from ROM (0xC000) that act as instructions for computing addition,
+;subtraction, multiplication, clearing, and ending the program.  The program then
+;writes the answers in memory at 0x0200.
 ;-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
 ; MSP430 Assembler Code Template for use with TI Code Composer Studio
 ;
 ;
@@ -12,13 +23,17 @@
             .retainrefs                     ; Additionally retain any sections
                                             ; that have references to current
                                             ; section
-;-------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 NegativePR	.byte	0x16, 0x22, 0x14, 0x55
 ;addingTest	.byte	0xFF, 0x11, 0x02, 0x11, 0x03, 0x55
 ;which ever functionality you want to run, just comment out the other functionalities :)
 ;AFunctionality: .byte	0x22, 0x11, 0x22, 0x22, 0x33, 0x33, 0x08, 0x44, 0x08, 0x22, 0x09, 0x44, 0xFF, 0x11, 0xFF, 0x44, 0xCC, 0x33, 0x02, 0x33, 0x00, 0x44, 0x33, 0x33, 0x08, 0x55
 ;BFunctionality:	.byte	0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0xDD, 0x44, 0x08, 0x22, 0x09, 0x44, 0xFF, 0x22, 0xFD, 0x55
 ;RequiredFuntionality: .byte	0x11, 0x11, 0x11, 0x11, 0x11, 0x44, 0x22, 0x22, 0x22, 0x11, 0xCC, 0x55
+
+--------------------------------------------------------------------------------
+
 
 
 ;CONSTANTS
