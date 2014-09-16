@@ -218,8 +218,6 @@ The multiplication does work, however, it is not compatable with the overflow ch
 
 Being stubborn, I decided to fix this even after the functionality was due.  
 
-#Unexpected Problems
-
 #Hardware Schematic
 There is no need for a hardware schematic in this lab.  
 
