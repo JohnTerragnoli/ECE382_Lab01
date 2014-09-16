@@ -7,6 +7,9 @@
 ;Description: Intakes bytes from ROM (0xC000) that act as instructions for computing addition,
 ;subtraction, multiplication, clearing, and ending the program.  The program then
 ;writes the answers in memory at 0x0200.
+;Inputs: Instructions from ROM (0xC000)
+;Outputs: mathematical answers in memory (0x0200)
+;Registers Destroyed: r5-r15
 ;-------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
