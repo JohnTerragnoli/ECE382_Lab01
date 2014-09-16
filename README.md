@@ -136,6 +136,55 @@ Attaining this functionality for addition and subtraction only required small am
 
 First, I realized when I was building the addition code that the carry flag is raised whenever overflow occurs.  This being said, I decided to find a way to check if the carry flag was raised.  I designed the following code for this mini experiment.  
 
+```
+		  	  ;check for over 255.
+			    mov.w	#ONE, CARRY_REG
+			    and.w	NC_FLAG, CARRY_REG
+			    jz		no_carry
+			    
+carry	    jmp   carry
+
+no_carry  jmp no_carry
+			
+			
+```
+
+ONE is the constant #0x0001.  NC_FLAG represents register 3, where the carry flag is located.  CARRY_REG is just a holding register where the calculation will be made.  
+
+The carry flag is the least significant bit.  If it is raised, this bit will be a 1.  Therefore, by anding register 3 with the number 1, the result will be 1 if and only if the carry flag is raised, and thus an overflow has occured.  I then added the ideas from this experiment into my code to meet the requirements for B Functionality.  This can be shown below:
+
+```
+			;get second command operand and add to first.
+ADD_OP		inc		PROG_LOC
+			add.b	0(PROG_LOC), FIRST
+
+			;check for over 255.
+			mov.w	#ONE, CARRY_REG
+			and.w	NC_FLAG, CARRY_REG
+			jz		no_bust_add
+
+			;EXCEEDS 255
+			mov.b	#UP_LIMIT, 0(MEM_STORE)
+			mov.b #UP_LIMIT, FIRST
+			inc		MEM_STORE
+			jmp		GET_COM
+
+			;within range
+no_bust_add mov.b	FIRST, 0(MEM_STORE)
+			inc		MEM_STORE
+			jmp		GET_COM
+```
+
+The only changes I made were to where the program will jump to.  If it's over 0xFF, or 255, then it will just put 0xFF in memory and make that the new FIRST.  If not, it will make the non-overflow answer FIRST and store that answer.  After either it will return to the top for the next command.  
+
+When I was making this code, I encountered a couple problems. The first was that I would cause my jmps to go to the opposite location that they were supposed to go.  I quickly realized this when I noted that 0x01+ 0x02 is not 0xFF.  I simply made the correction at that point and fixed the code.  Also, I did not notice this until later, mostly because the test cases did not cover this, but the program did not set FIRST equal to 0xFF when an overflow occured.  This is technically right considering 0xFF is the answer to the previous mathematical statement.  This only took one line of code to correct.  
+
+##Subtraction Overflow
+
+To restrict answers to above 0x00, a similar method was used as with the addition code.  The only differences are as follows.  The bit for the negative flag, mentioned in the Required Functionality section, is held in the third least significant bit.  This means the same operation can be performed with the number 0x04, as in the addition overflow determination. 0x04 is 0b00000100.  This was done and it worked correctly the first time, since most of the trouble was found when creating the addition overflow detector.  
+
+This concludes the process, debugging, and results that were done when creating the B Functionality.  
+
 
 Unfortunately in my program, the overflow control for multiplication does not work.  It does work for addition and subtraction.  
 
