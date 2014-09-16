@@ -192,7 +192,31 @@ Unfortunately in my program, the overflow control for multiplication does not wo
 
 In order to earn full credit, this method needed to work in log(n) time.  This was done by implementing [Peasant Multiplication](http://www.cut-the-knot.org/Curriculum/Algebra/PeasantMultiplication.shtml). It is explained further in this cite.  The basic principle is that the first number is divided by two repeatedly, which the second number is doubled.  The results from doubling the second number are all added together to get the answer, with the exception of the second numbers that correspond to an even first number.  This means that the answer will be found in log(n) times.  
 
-The multiplication does work, however, it is not compatable with the overflow check in the B functionality.  It will roll over sometimes. 
+For example
+101 X  010  = ten
+
+101 --  0010 (count)
+010 --  0100 (don't count)
+001 -	1000 (count)
+
+answer = 0010 + 1000 = Ten
+
+In order to make this happen, I decided to make an entirely different project, just to see if I could get two numbers to multiply together correctly.  On the bright side, it worked, and isolated mistakes while I worked.  On the negative side, it took me a extra time to rename all of the variables when I wanted to insert that code into my simple calculator.  
+
+Anyway, with the actual coding, I actually broke it down into smaller parts.  First, I just created code that took in two numbers and halved one and doubled the other.  From there, I wrote code that summed all of the doubles of the second number.  This made me realize, however, that a loop was necessary to use a jump to ensure that the original second number was included in the summation. Therefore, I added a condition that would skip over the divide/half function right after the original numbers were fetched, and go right to the summation part.  At the end of the summation part then the program looped back up to where the numbers were halved/doubled.  This can all be seen as part of the [Final Code](https://raw.githubusercontent.com/JohnTerragnoli/ECE382_Lab01/master/main.asm).  
+
+After I tested this to work, I added the condition after the SECOND number was halved to check if the first number was even or not.  The same method for determining if the carry flag was up was used for this.  If it was even, the doubled number was added to a register.  This produced the result. 
+
+Unfortunately, the multiplication still did not work correctly.  I stepped through the program and determined this was because the register used to sum the doubled numbers already had random numbers in it.  To fix this, I simply assigned that register to equal zero before the multiplication began.  After this was done, the program worked correctly to multiply numbers, including multiplying by zero.
+
+After it was determined that this program worked, it was inserted into the simple calculator code and used there. 
+
+##Log(n)
+Peasant multiplication is of order log(n).  This is because the amount of steps that the program needs to run through to complete this program is log(n), with n being the first number multiplied.  It makes sense because log(n) is basically the number of times that a number can be divided in half, which is exactly what the program does!!!
+
+The multiplication does work, however, it is not compatable with the overflow check in the B functionality.  It will roll over sometimes. I fixed this, however, some of my code did not save before I did the functionality check and I had to send in an earlier version of the code.  
+
+Being stubborn, I decided to fix this even after the functionality was due.  
 
 #Unexpected Problems
 
