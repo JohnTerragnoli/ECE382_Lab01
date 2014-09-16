@@ -123,6 +123,7 @@ Just puts the program into an infinite loop.
 
 This marks the end of the Required Functionality and how it was achieved.  
 
+The video for the required functionality may be seen here [Required Functionality](https://drive.google.com/file/d/0Bymb7kjtbzuqbmVJa3pfN0ZwV00/edit?usp=sharing)
 
 
 
@@ -188,6 +189,8 @@ This concludes the process, debugging, and results that were done when creating 
 
 Unfortunately in my program, the overflow control for multiplication does not work.  It does work for addition and subtraction.  
 
+The video for the B functionality may be seen [here ](https://drive.google.com/file/d/0Bymb7kjtbzuqSVB0V2F4WmJCVXc/edit?usp=sharing)
+
 #A Functionality
 
 In order to earn full credit, this method needed to work in log(n) time.  This was done by implementing [Peasant Multiplication](http://www.cut-the-knot.org/Curriculum/Algebra/PeasantMultiplication.shtml). It is explained further in this cite.  The basic principle is that the first number is divided by two repeatedly, which the second number is doubled.  The results from doubling the second number are all added together to get the answer, with the exception of the second numbers that correspond to an even first number.  This means that the answer will be found in log(n) times.  
@@ -216,7 +219,7 @@ Peasant multiplication is of order log(n).  This is because the amount of steps 
 
 The multiplication does work, however, it is not compatable with the overflow check in the B functionality.  It will roll over sometimes. I fixed this, however, some of my code did not save before I did the functionality check and I had to send in an earlier version of the code.  
 
-Being stubborn, I decided to fix this even after the functionality was due.  
+The video for the Afunctionality may be seen [here ](https://drive.google.com/file/d/0Bymb7kjtbzuqbUFWZ0hrWW92Wlk/edit?usp=sharing)
 
 #Hardware Schematic
 There is no need for a hardware schematic in this lab.  
